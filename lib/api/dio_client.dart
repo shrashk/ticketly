@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:ticketly/models/api_response.dart';
 
@@ -27,7 +26,7 @@ class DioClient {
   // Fetch API Response
   Future<ApiResponse> fetchApiResponse(String keyword) async {
     try {
-      debugPrint("////////////critical how is this ??");
+     
       final response = await dio.get("/XML_STOPFINDER_REQUEST?language=de&outputFormat=RapidJSON&coordOutputFormat=WGS84[DD:ddddd]&type_sf=any&name_sf=$keyword");
       if (response.statusCode == 200) {
         return ApiResponse.fromJson(response.data);

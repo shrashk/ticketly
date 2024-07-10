@@ -1,10 +1,11 @@
+import 'package:ticketly/constants.dart';
 import 'package:ticketly/models/api_response.dart';
 
 abstract class DashboardState {}
 
 class DashboardInitial extends DashboardState {
   final String message;
-  DashboardInitial({this.message = "Please enter some keywords to get the results"});
+  DashboardInitial({this.message = AppStrings.enterKeywords});
 }
 
 class DashboardLoading extends DashboardState {}

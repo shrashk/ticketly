@@ -18,19 +18,26 @@ class DashboardScreen extends StatefulWidget {
 
 class DashboardScreenState extends State<DashboardScreen> {
   final ScrollController scrollController = ScrollController();
+  final FocusNode _focusNode = FocusNode();
   late Timer searchOnStoppedTyping;
   bool _isSearchTapped = false;
-  final FocusNode _focusNode = FocusNode();
+  
 
   @override
   void initState() {
     super.initState();
     searchOnStoppedTyping = Timer(Duration.zero, () {});
+    //listener to handle focus changes
     _focusNode.addListener(_handleFocusChange);
+    //listener to handle scroll events on the scroll controller
     scrollController.addListener(_onScroll);
   }
 
   void _handleSearchChange(String value) {
+  /*Duration to wait after the user stops typing before triggering a search.
+    This helps in reducing network calls on every character input and ensures
+    that the search request is only sent after a brief pause when the user
+    finishes typing or pauses briefly.*/
     const duration = Duration(milliseconds: 800);
     if (searchOnStoppedTyping.isActive) {
       searchOnStoppedTyping.cancel();
@@ -40,13 +47,13 @@ class DashboardScreenState extends State<DashboardScreen> {
           duration, () => context.read<DashboardCubit>().search(value.trim()));
     }
   }
-
+  //Function to hide the keyboard when user scrolls the list
   void _onScroll() {
     if (_focusNode.hasFocus) {
       FocusManager.instance.primaryFocus?.unfocus();
     }
   }
-
+  //Function to trigger _isSearchTapped bool
   void _handleFocusChange() {
     if (_focusNode.hasFocus) {
       setState(() {
