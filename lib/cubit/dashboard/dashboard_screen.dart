@@ -38,12 +38,16 @@ class DashboardScreenState extends State<DashboardScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+     // Subscribe to text updates from the DashboardCubit's stream.
     _subscribeToTextUpdates();
   }
 
   void _subscribeToTextUpdates() {
     _textSubscription = context.read<DashboardCubit>().stream.listen((state) {
       if (state is DashboardLoaded) {
+         // If the text in the search input (_controller.text) is different from
+        // the text in the state (state.textInSearch), update the controller's text.
+      
         if (_controller.text != state.textInSearch) {
           _controller.text = state.textInSearch;
           setState(() {});
