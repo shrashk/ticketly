@@ -4,12 +4,15 @@ import 'package:ticketly/constants.dart';
 class SearchInput extends StatelessWidget {
   final ValueChanged<String> onChanged;
   final FocusNode focusNode;
+  final TextEditingController controller;
 
-  const SearchInput({super.key, required this.onChanged,required this.focusNode,});
+  const SearchInput({super.key, required this.onChanged, required this.focusNode, required this.controller});
 
   @override
   Widget build(BuildContext context) {
-    return TextField(focusNode: focusNode,
+    return TextField(
+      controller: controller,
+      focusNode: focusNode,
       onChanged: onChanged,
       decoration: InputDecoration(
         prefixIcon: const Icon(Icons.search, color: Colors.grey),

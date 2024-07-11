@@ -28,7 +28,6 @@ class MatchThumbnail extends StatelessWidget {
             LocationName(name: location.name),
             LocationTypeBadge(type: location.type),
             LocationParent(parentType: location.parent.type, parentName: location.parent.name),
-        
             if (location.properties != null) AdditionalInfo(properties: location.properties!)
           ],
         ),
@@ -114,7 +113,7 @@ class LocationTypeBadge extends StatelessWidget {
           ),
           child: Text(
             "${AppStrings.typePrefix}$type",
-            style: AppStyles.listItemSubtitle,
+            style: AppStyles.type,
           ),
         ),
       ),
@@ -145,7 +144,8 @@ class AdditionalInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [    const Divider(color: AppColors.divider),
+      children: [
+        const Divider(color: AppColors.divider),
         Row(
           children: [
             const Text(

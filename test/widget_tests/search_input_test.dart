@@ -18,6 +18,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: SearchInput(
+              controller: TextEditingController(),
               onChanged: onChanged,
               focusNode: focusNode,
             ),

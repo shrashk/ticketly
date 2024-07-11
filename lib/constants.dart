@@ -6,14 +6,13 @@ class AppStrings {
   static const String dataFetched = "Data fetched successfully!";
   static const String noResults = "No results found. Please search with a different keyword.";
   static const String errorOccurred = "An error occurred. Please try again.";
-  static const String searchHint = "Search something...";
+  static const String searchHint = "Search start point";
   static const String bestMatch = "Best Match";
   static const String typePrefix = "Type: ";
   static const String localityPrefix = "Locality: ";
   static const String additionalInfoPrefix = "Additional info: ";
   static const String somethingWentWrong = "Something went wrong.";
 }
-
 
 class AppBorders {
   static BorderRadius listItemBorderRadius = BorderRadius.circular(10);

@@ -16,4 +16,11 @@ class DashboardCubit extends Cubit<DashboardState> {
       emit(DashboardError(AppStrings.errorOccurred));
     }
   }
+
+  void selectPoint({required String locationPoint}) {
+    if (state is DashboardLoaded) {
+      var currState = state as DashboardLoaded;
+      emit(currState.copyWith(textInSearch: locationPoint));
+    }
+  }
 }

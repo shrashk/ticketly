@@ -18,6 +18,8 @@ class DashboardScreen extends StatefulWidget {
 
 class DashboardScreenState extends State<DashboardScreen> {
   final ScrollController scrollController = ScrollController();
+  final TextEditingController _controller = TextEditingController();
+  StreamSubscription<DashboardState>? _textSubscription;
   final FocusNode _focusNode = FocusNode();
   late Timer searchOnStoppedTyping;
   bool _isSearchTapped = false;
@@ -25,11 +27,29 @@ class DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
     super.initState();
+
     searchOnStoppedTyping = Timer(Duration.zero, () {});
     //listener to handle focus changes
     _focusNode.addListener(_handleFocusChange);
     //listener to handle scroll events on the scroll controller
     scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _subscribeToTextUpdates();
+  }
+
+  void _subscribeToTextUpdates() {
+    _textSubscription = context.read<DashboardCubit>().stream.listen((state) {
+      if (state is DashboardLoaded) {
+        if (_controller.text != state.textInSearch) {
+          _controller.text = state.textInSearch;
+          setState(() {});
+        }
+      }
+    });
   }
 
   void _handleSearchChange(String value) {
@@ -43,8 +63,7 @@ class DashboardScreenState extends State<DashboardScreen> {
     }
     if (value.isNotEmpty) {
       // The Timer calls the search method of the DashboardCubit with the trimmed value.
-      searchOnStoppedTyping = Timer(
-          duration, () => context.read<DashboardCubit>().search(value.trim()));
+      searchOnStoppedTyping = Timer(duration, () => context.read<DashboardCubit>().search(value.trim()));
     }
   }
 
@@ -72,6 +91,7 @@ class DashboardScreenState extends State<DashboardScreen> {
     }
     _focusNode.removeListener(_handleFocusChange);
     _focusNode.dispose();
+    _textSubscription?.cancel();
     super.dispose();
   }
 
@@ -89,6 +109,7 @@ class DashboardScreenState extends State<DashboardScreen> {
             //Search textfield - position updates when tapped
             AnimatedSearchInput(
               isSearchTapped: _isSearchTapped,
+              controller: _controller,
               focusNode: _focusNode,
               onChanged: _handleSearchChange,
             ),
@@ -133,7 +154,7 @@ class SearchResultList extends StatelessWidget {
                 }
                 //default state
                 else {
-                  return const Center(child: Text(AppStrings.enterKeywords));
+                  return const Center(child: SizedBox());
                 }
               },
             ),
@@ -157,11 +178,14 @@ class LocationsList extends StatelessWidget {
         child: ListView.separated(
           controller: scrollController,
           itemCount: state.apiResponse.locations.length,
-          separatorBuilder: (context, index) =>
-              const SizedBox(height: AppConstants.listItemSeparatorHeight),
+          separatorBuilder: (context, index) => const SizedBox(height: AppConstants.listItemSeparatorHeight),
           itemBuilder: (context, index) {
             final location = state.apiResponse.locations[index];
-            return MatchThumbnail(location: location);
+            return GestureDetector(
+                onTap: () {
+                  context.read<DashboardCubit>().selectPoint(locationPoint: location.name);
+                },
+                child: MatchThumbnail(location: location));
           },
         ),
       );
@@ -177,13 +201,9 @@ class AnimatedSearchInput extends StatelessWidget {
   // Is required to manipulate the keyboard focus/unfocus functionality
   final FocusNode focusNode;
   final ValueChanged<String> onChanged;
+  final TextEditingController controller;
 
-  const AnimatedSearchInput({
-    super.key,
-    required this.isSearchTapped,
-    required this.focusNode,
-    required this.onChanged,
-  });
+  const AnimatedSearchInput({super.key, required this.isSearchTapped, required this.focusNode, required this.onChanged, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -192,10 +212,11 @@ class AnimatedSearchInput extends StatelessWidget {
     return AnimatedPositioned(
       duration: AppConstants.searchInputAnimationDuration,
       // Top position of the widget, changes based on whether the search input is tapped.
-      top: isSearchTapped ? 10 : MediaQuery.of(context).size.height / 2 - 25,
+      top: isSearchTapped ? 10 : MediaQuery.of(context).size.height / 2 - 50,
       left: 20,
       right: 20,
       child: SearchInput(
+        controller: controller,
         focusNode: focusNode,
         onChanged: onChanged,
       ),
