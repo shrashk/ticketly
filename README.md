@@ -87,7 +87,7 @@ For help getting started with Flutter development, view the
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/your-project.git
+   git clone https://github.com/shrashk/ticketly.git
 
 2. Navigate to the Project Root:
 
