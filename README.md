@@ -12,6 +12,16 @@ This Flutter mobile application assists users in journey planning by allowing th
 
 - Modular Design: Structured the project using modular components for scalability and maintainability.
 - Cubit Implementation: Cubit preferred over BLoC - because of its simplicity, ease of use, reduced boilerplate, and clear focus on managing state with minimal overhead. It allows developers to achieve effective state management while maintaining a clean and maintainable codebase, which is crucial for smaller projects with limited scope and complexity.
+- Project Structure: Each screen/page in the application follows a specific structure, organized under the lib/cubit directory. The structure includes separate files for the Cubit class, the state definitions, and the main screen widget.
+```bash
+lib/
+  cubit/
+    screen_name/
+      screen_name_cubit.dart
+      screen_name_screen.dart
+      screen_name_state.dart
+  widgets/
+```
 - Named Routes: Utilized named routes for efficient navigation throughout the app.
 
 ## Testing
